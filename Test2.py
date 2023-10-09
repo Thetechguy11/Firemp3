@@ -5,7 +5,6 @@ import utime
 motor_pins = [machine.Pin(pin, machine.Pin.OUT) for pin in (17, 18, 19, 20)]
 
 # Define the sequence of steps for the 28BYJ-48 motor
-# The sequence is for clockwise rotation; you can reverse it for counterclockwise
 sequence = [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -13,18 +12,21 @@ sequence = [
     [0, 0, 0, 1],
 ]
 
-# Set the initial direction and step delay (adjust as needed)
+# Set the initial direction and step delay (adjust as needed for speed)
 clockwise = True
-delay = 5  # Delay in milliseconds
+delay = 5  # Delay in milliseconds for moderate speed
 
 def step_motor(clockwise):
-    for i in range(4):
-        for pin, state in zip(motor_pins, sequence[i]):
-            pin.value(state)
-        utime.sleep_ms(delay)
+    for _ in range(512):  # 512 steps is a full rotation for 28BYJ-48
+        for i in range(4):
+            for pin, state in zip(motor_pins, sequence[i]):
+                pin.value(state)
+            utime.sleep_ms(delay)
 
 while True:
-    if machine.Pin(17).value() == 1:
-        step_motor(clockwise=True)
-    elif machine.Pin(16).value() == 1:
-        step_motor(clockwise=False)
+    if machine.Pin(1).value() == 1:
+        clockwise = True
+    elif machine.Pin(0).value() == 1:
+        clockwise = False
+
+    step_motor(clockwise=True)  # Rotate according to the current direction
