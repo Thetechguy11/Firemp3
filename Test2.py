@@ -8,13 +8,9 @@ motor_pins = [machine.Pin(pin, machine.Pin.OUT) for pin in (17, 18, 19, 20)]
 # The sequence is for clockwise rotation; you can reverse it for counterclockwise
 sequence = [
     [1, 0, 0, 0],
-    [1, 1, 0, 0],
     [0, 1, 0, 0],
-    [0, 1, 1, 0],
     [0, 0, 1, 0],
-    [0, 0, 1, 1],
     [0, 0, 0, 1],
-    [1, 0, 0, 1],
 ]
 
 # Set the initial direction and step delay (adjust as needed)
@@ -22,7 +18,7 @@ clockwise = True
 delay = 5  # Delay in milliseconds
 
 def step_motor(clockwise):
-    for i in range(8):
+    for i in range(4):
         for pin, state in zip(motor_pins, sequence[i]):
             pin.value(state)
         utime.sleep_ms(delay)
